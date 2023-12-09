@@ -5,6 +5,15 @@ import os
 import json
 
 from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.place import Place
+from models.amenity import Amenity
+from models.review import Review
+
+
+
 
 class FileStorage:
     '''serializes instances to a JSON file and deserializes JSON file to instances'''
@@ -19,12 +28,17 @@ class FileStorage:
     def new(self, obj):
         '''sets in __objects the obj with key <obj class name>.id'''
         key = obj.__class__.__name__ + "." + obj.id
-        self.__objects[key] = obj.to_dict()
+        # self.__objects[key] = obj.to_dict()
+        self.__objects[key] = obj
+
     
     def save(self):
         '''serializes __objects to the JSON file'''
+        glbl_dict = self.__objects
+        glbl_dict = {key: glbl_dict[key].to_dict() for key in glbl_dict.keys()}
         with open(self.__file_path, "w") as f:
-            json.dump(self.__objects, f)
+            json.dump(glbl_dict, f)
+
     
     def reload(self):
         '''deserializes the JSON file to __objects'''
@@ -35,10 +49,4 @@ class FileStorage:
                     cls_name = value["__class__"]
                     cls = eval(cls_name)
                     self.__objects[key] = cls(**value)
-
-
-
-
-
-
 

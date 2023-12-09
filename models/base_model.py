@@ -4,7 +4,9 @@
 import datetime
 import uuid
 # from models import storage
-from models.engine.file_storage import storage
+# from models.engine.file_storage import storage
+import models
+# from models.engine import storage
 
 
 class BaseModel:
@@ -22,7 +24,7 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.datetime.now()
             self.updated_at = datetime.datetime.now()
-            storage.new(self)
+            models.storage.new(self)
 
     def __str__(self):
         '''object string representation'''
@@ -31,11 +33,7 @@ class BaseModel:
     def save(self):
         '''update the record time'''
         self.updated_at = datetime.datetime.now()
-        storage.save()
-
-
-
-    
+        models.storage.save() 
 
     def to_dict(self):
         '''dictionary of instantce attribute'''
